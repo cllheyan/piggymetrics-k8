@@ -46,7 +46,7 @@ spec:
             secretKeyRef:
               key: statistics_service_password
               name: piggymetrics
-        image: afermon/piggymetrics-statistics-service
+        image: cr-cn-beijing.volces.com/cloudnative/statistics-service:1.0
         imagePullPolicy: Always
         name: statistics-service
         ports:
