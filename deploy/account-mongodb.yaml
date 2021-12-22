@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  generation: 3
+  labels:
+    app: account-mongodb
+    project: piggymetrics
+    tier: database
+  name: account-mongodb
+  namespace: default
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: account-mongodb
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: account-mongodb
+        project: piggymetrics
+        tier: database
+    spec:
+      containers:
+      - env:
+        - name: MONGODB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: account_mongodb_password
+              name: piggymetrics
+        - name: INIT_DUMP
+          value: account-service-dump.js
+        image: cr-cn-beijing.volces.com/cloudnative/mongodb:1.0
+        imagePullPolicy: Always
+        name: account-mongodb
+        ports:
+        - containerPort: 27017
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+

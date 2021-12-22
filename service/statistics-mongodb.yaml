@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: statistics-mongodb
+    project: piggymetrics
+    tier: database
+  name: statistics-mongodb
+  namespace: default
+spec:
+  ports:
+  - name: mongo
+    port: 27017
+    protocol: TCP
+    targetPort: 27017
+  selector:
+    app: statistics-mongodb
+    project: piggymetrics
+    tier: database
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}
